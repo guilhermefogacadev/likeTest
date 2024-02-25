@@ -1,9 +1,12 @@
-package br.com.like.liketest.Entities;
+package br.com.like.liketest.entities;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
+
 @Entity
 @Table(name ="orcamento")
+
 public class Orcamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,7 +15,6 @@ public class Orcamento {
     private String nomeCliente;
     @Column
     private String data;
-
     public Orcamento() {
     }
 
@@ -20,6 +22,12 @@ public class Orcamento {
         this.id = id;
         this.nomeCliente = nomeCliente;
         this.data = data;
+    }
+
+    public Orcamento(String nomeCliente, String data) {
+        this.nomeCliente = nomeCliente;
+        this.data = data;
+
     }
 
 
@@ -46,4 +54,7 @@ public class Orcamento {
     public void setData(String data) {
         this.data = data;
     }
+
 }
+
+
