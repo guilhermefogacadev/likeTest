@@ -17,7 +17,7 @@ public class ProdutoService {
     @Autowired
     private ProdutoOrcamentoRepository repositoryProduto;
 
-    public void salvaProduto(OrcamentoDTO request, Orcamento orcamento) {
+    protected void salvaProduto(OrcamentoDTO request, Orcamento orcamento) {
         request.produtos().forEach(produtos ->{
             ProdutoOrcamento produto = new ProdutoOrcamento();
             produto.setOrcamento(orcamento);
@@ -29,7 +29,7 @@ public class ProdutoService {
     }
 
 
-    public ArrayList<ProdutoOrcamento> buscarPorOrcamento(Orcamento orcamento) {
+    protected ArrayList<ProdutoOrcamento> buscarPorOrcamento(Orcamento orcamento) {
 
         ArrayList<ProdutoOrcamento> produto = repositoryProduto.findAllByOrcamento(orcamento);
         return produto;

@@ -31,12 +31,12 @@ public class OrcamentoService {
 
         ProdutoService.salvaProduto(request,orcamento);
 
-        return new OrcamentoDTO(request.nomeCliente(),request.produtos(),calculaTotal(request.produtos()));
+        return new OrcamentoDTO(request.nomeCliente(),request.produtos(),request.data(),calculaTotal(request.produtos()));
 
     }
     public OrcamentoDTO propostaOrcamento(OrcamentoDTO request){
         double total= calculaTotal(request.produtos());
-        return new OrcamentoDTO(request.nomeCliente(), request.produtos(), total);
+        return new OrcamentoDTO(request.nomeCliente(), request.produtos(),request.data(), total);
 
     }
 
@@ -47,7 +47,7 @@ public class OrcamentoService {
 
         for(Orcamento orcamento:busca){
             ArrayList<ProdutoOrcamento>produto= ProdutoService.buscarPorOrcamento(orcamento);
-            OrcamentoDTO orcamentoDTO= new OrcamentoDTO(orcamento.getNomeCliente(),produto,calculaTotal(produto));
+            OrcamentoDTO orcamentoDTO= new OrcamentoDTO(orcamento.getNomeCliente(),produto,orcamento.getData(),calculaTotal(produto));
             orcamentos.add(orcamentoDTO);
         }
 
@@ -62,7 +62,7 @@ public class OrcamentoService {
 
         ArrayList<ProdutoOrcamento>produto= ProdutoService.buscarPorOrcamento(orcamento);
 
-        return new OrcamentoDTO(orcamentoOptional.get().getNomeCliente(),produto,calculaTotal(produto));
+        return new OrcamentoDTO(orcamentoOptional.get().getNomeCliente(),produto, orcamentoOptional.get().getData(),calculaTotal(produto));
 
     }
 
