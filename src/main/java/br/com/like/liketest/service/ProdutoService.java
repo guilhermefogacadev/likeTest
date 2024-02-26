@@ -17,7 +17,7 @@ public class ProdutoService {
     @Autowired
     private ProdutoOrcamentoRepository repositoryProduto;
 
-    protected void salvaProduto(OrcamentoDTO request, Orcamento orcamento) {
+    public List<ProdutoOrcamento> salvaProduto(OrcamentoDTO request, Orcamento orcamento) {
         request.produtos().forEach(produtos ->{
             ProdutoOrcamento produto = new ProdutoOrcamento();
             produto.setOrcamento(orcamento);
@@ -26,13 +26,15 @@ public class ProdutoService {
             produto.setQuantidade(produtos.getQuantidade());
             repositoryProduto.save(produto);
         });
+
+        return request.produtos();
+
     }
 
 
-    protected ArrayList<ProdutoOrcamento> buscarPorOrcamento(Orcamento orcamento) {
+    public ArrayList<ProdutoOrcamento> buscarPorOrcamento(Orcamento orcamento) {
 
-        ArrayList<ProdutoOrcamento> produto = repositoryProduto.findAllByOrcamento(orcamento);
-        return produto;
+        return repositoryProduto.findAllByOrcamento(orcamento);
 
     }
 }

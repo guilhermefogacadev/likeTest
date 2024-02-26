@@ -1,23 +1,24 @@
 package br.com.like.liketest.controller;
 
+
+import br.com.like.liketest.controller.exeption.ErrorResponse;
 import br.com.like.liketest.dto.OrcamentoDTO;
-import br.com.like.liketest.entities.Orcamento;
-import br.com.like.liketest.entities.ProdutoOrcamento;
-import br.com.like.liketest.repository.OrcamentoRepository;
-import br.com.like.liketest.repository.ProdutoOrcamentoRepository;
 import br.com.like.liketest.service.OrcamentoService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
+
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
+
 
 @RestController
 @OpenAPIDefinition(info = @Info(title = "API de Orçamentos", description = "API desenvolvida para o teste LikeSystema"))
@@ -30,7 +31,7 @@ public class OrcamentoController {
 
     @Operation(summary = "Criação dos Orçamentos", method = "POST")
     @PostMapping("/criar")
-    public ResponseEntity criarOrcamento(@RequestBody OrcamentoDTO request){
+    public ResponseEntity criarOrcamento(@Valid @RequestBody OrcamentoDTO request){
         OrcamentoDTO result = orcamentoService.salvarOrcamento(request);
 
         return ResponseEntity.status(201).build();
@@ -38,7 +39,7 @@ public class OrcamentoController {
     }
     @Operation(summary = "Proposta de Orçamento", method = "POST")
     @PostMapping("/proposta")
-    public ResponseEntity<OrcamentoDTO> propostaOrcamento(@RequestBody OrcamentoDTO request){
+    public ResponseEntity<OrcamentoDTO> propostaOrcamento(@Valid @RequestBody OrcamentoDTO request){
 
         OrcamentoDTO response =orcamentoService.propostaOrcamento(request);
         return ResponseEntity.ok().body(response);
@@ -46,9 +47,13 @@ public class OrcamentoController {
 
     @Operation(summary = "Listagem de Orçamentos", method = "GET")
     @GetMapping(value = "/buscar")
+
     public ResponseEntity<List<OrcamentoDTO>> buscarTodos() {
         List<OrcamentoDTO> orcamentos =orcamentoService.buscaTodos();
 
+        if(orcamentos.isEmpty()){
+                return ResponseEntity.status(404).body(orcamentos);
+        }
         return ResponseEntity.ok(orcamentos);
 
     }
@@ -57,6 +62,7 @@ public class OrcamentoController {
     public ResponseEntity<OrcamentoDTO> buscarPorId(@PathVariable(value="id") Long id) {
 
        OrcamentoDTO orcamento = orcamentoService.buscarPorId(id);
+
         return ResponseEntity.ok(orcamento);
 
     }

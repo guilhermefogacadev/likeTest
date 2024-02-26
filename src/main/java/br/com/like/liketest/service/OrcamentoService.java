@@ -30,7 +30,6 @@ public class OrcamentoService {
         Orcamento orcamento=repositoryOrcamento.save(template);
 
         ProdutoService.salvaProduto(request,orcamento);
-
         return new OrcamentoDTO(request.nomeCliente(),request.produtos(),request.data(),calculaTotal(request.produtos()));
 
     }
@@ -42,7 +41,7 @@ public class OrcamentoService {
 
     public List<OrcamentoDTO> buscaTodos(){
         List<Orcamento>busca = repositoryOrcamento.findAll();
-
+        System.out.println("Service Lista "+busca);
         List<OrcamentoDTO> orcamentos= new ArrayList<>();
 
         for(Orcamento orcamento:busca){
@@ -55,7 +54,6 @@ public class OrcamentoService {
         return orcamentos;
     }
     public OrcamentoDTO buscarPorId( Long id) {
-
 
         Optional<Orcamento> orcamentoOptional = repositoryOrcamento.findById(id);
         Orcamento orcamento= orcamentoOptional.get();
