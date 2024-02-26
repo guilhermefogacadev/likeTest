@@ -5,6 +5,7 @@ import br.com.like.liketest.entities.Orcamento;
 import br.com.like.liketest.entities.ProdutoOrcamento;
 import br.com.like.liketest.repository.OrcamentoRepository;
 import br.com.like.liketest.repository.ProdutoOrcamentoRepository;
+import br.com.like.liketest.service.OrcamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,58 +24,42 @@ public class OrcamentoController {
     private OrcamentoRepository repositoryOrcamento;
     @Autowired
     private ProdutoOrcamentoRepository repositoryProduto;
+
+    @Autowired
+    private OrcamentoService orcamentoService;
     @PostMapping("/criar")
     public ResponseEntity criarOrcamento(@RequestBody OrcamentoDTO request){
-        Orcamento template = new Orcamento(request.nomeCliente(), LocalDate.now().toString());
-        Orcamento orcamento=repositoryOrcamento.save(template);
+        OrcamentoDTO result = orcamentoService.salvarOrcamento(request);
 
-        request.produtos().forEach(produtos ->{
-            ProdutoOrcamento produto = new ProdutoOrcamento();
-            produto.setOrcamento(orcamento);
-            produto.setNome(produtos.getNome());
-            produto.setValor(produtos.getValor());
-            produto.setQuantidade(produtos.getQuantidade());
-            repositoryProduto.save(produto);
-                });
-
-
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(201).build();
 
     }
     @PostMapping("/proposta")
     public ResponseEntity<OrcamentoDTO> propostaOrcamento(@RequestBody OrcamentoDTO request){
-        double total= 0;
-        for(ProdutoOrcamento produto:request.produtos()){
-            total+=produto.getValor()*produto.getQuantidade();
 
-        }
-        OrcamentoDTO response =new OrcamentoDTO(request.nomeCliente(), request.produtos(), total);
-        return ResponseEntity.ok(response);
+        OrcamentoDTO response =orcamentoService.propostaOrcamento(request);
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping(value = "/buscar")
-    public ResponseEntity<List<Orcamento>> buscarTodos() {
-        List<Orcamento> result = repositoryOrcamento.findAll();
-
+    public ResponseEntity<List<OrcamentoDTO>> buscarTodos() {
+        List<OrcamentoDTO> result =orcamentoService.buscaTodos();
 
         return ResponseEntity.ok(result);
 
     }
     @GetMapping(value = "/buscar/{id}")
-    public ResponseEntity<Orcamento> buscarPorId(@PathVariable(value="id") Long id) {
-        Optional<Orcamento> orcamentoOptional = repositoryOrcamento.findById(id);
+    public ResponseEntity<OrcamentoDTO> buscarPorId(@PathVariable(value="id") Long id) {
 
-        if (orcamentoOptional.isPresent()) {
-            Orcamento orcamento = orcamentoOptional.get();
-            return ResponseEntity.ok(orcamento);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+       OrcamentoDTO orcamento = orcamentoService.buscarPorId(id);
+        return ResponseEntity.ok(orcamento);
+
     }
 
     @DeleteMapping(value = "/excluir/{id}")
     public ResponseEntity excluirOrcamento(@PathVariable(value="id") Long id) {
-        repositoryProduto.deleteById(id);
+
+        orcamentoService.delete(id);
         return ResponseEntity.status(202).build();
     }
 
