@@ -1,11 +1,11 @@
 package br.com.like.liketest.dto;
 
 import br.com.like.liketest.entities.ProdutoOrcamento;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
-import java.util.Date;
+
 
 public record OrcamentoDTO(
         @NotNull(message = "O nome do cliente é obrigatório")
