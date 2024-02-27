@@ -21,7 +21,7 @@ Este projeto consiste em uma API para geração de orçamentos, desenvolvida par
 Ao executar o projeto o Maven instalará as dependencias necessárias.
 
 ## Visualização do Swagger
-```Com a aplicação em EXECUÇÃO , acesse a url: http://localhost:3000/swagger-ui/index.html#/```
+```Com a aplicação em EXECUÇÃO , acesse a url: http://localhost:8080/swagger-ui/index.html#/```
 
 ## Entidade Orçamento
 
